@@ -1,6 +1,7 @@
 {
   "name": "ionic-pullup",
   "description": "Ionic pull up footer",
+  "main": "./dist/ion-pullup.js",
   "version": "1.0.3",
   "homepage": "https://github.com/arielfaur",
   "license": "MIT",

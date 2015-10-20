@@ -129,7 +129,7 @@ angular.module('ionic-pullup', [])
                       }
                   }
 
-                  $rootScope.$broadcast('ionPullUp:tap', footer.state);
+                  $rootScope.$broadcast('ionPullUp:toggle', footer.state);
               };
 
               this.onDrag = function(e) {
@@ -146,8 +146,25 @@ angular.module('ionic-pullup', [])
                           $element.css({'-webkit-transform': 'translate3d(0, ' + footer.posY + 'px, 0)', 'transform': 'translate3d(0, ' + footer.posY + 'px, 0)'});
                           break;
                       case 'dragend':
+                          if(footer.state == FooterState.MINIMIZED || footer.state == FooterState.COLLAPSED) {
+                            if(footer.posY < (footer.height / 3) * 2) {
+                              expand();
+                              $rootScope.$broadcast('ionPullUp:toggle', footer.state);
+                            }
+                            else
+                              collapse();
+                          } else {
+                            if(footer.posY > footer.height / 3) {
+                              collapse();
+                              $rootScope.$broadcast('ionPullUp:toggle', footer.state);
+                            }
+                            else
+                              expand();
+                          }
+
                           $element.css({'transition': '300ms ease-in-out'});
-                          footer.lastPosY = footer.posY;
+                          //footer.lastPosY = footer.posY;
+
                           break;
                   }
               };
@@ -230,7 +247,7 @@ angular.module('ionic-pullup', [])
               $ionicGesture.on('tap', controller.onTap, element);
               $ionicGesture.on('drag dragstart dragend', controller.onDrag, element);
 
-              scope.$on('ionPullUp:tap', function() {
+              scope.$on('ionPullUp:toggle', function() {
                   element.find('i').toggleClass(toggleClasses);
               });
 

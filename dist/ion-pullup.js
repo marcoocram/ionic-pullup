@@ -108,8 +108,10 @@ angular.module('ionic-pullup', [])
               };
 
               this.onTap = function(e) {
-                  e.gesture.srcEvent.preventDefault();
-                  e.gesture.preventDefault();
+                  if(e.gesture) {
+                    e.gesture.srcEvent.preventDefault();
+                    e.gesture.preventDefault(); 
+                  }
 
                   if (footer.state == FooterState.COLLAPSED) {
                       if (footer.defaultBehavior == FooterBehavior.HIDE) {
@@ -236,7 +238,7 @@ angular.module('ionic-pullup', [])
                   display: 'block',
                   background: background,
                   position: 'absolute',
-                  top: 1-height + 'px',
+                  top: 0-height + 'px',
                   left: (($window.innerWidth - width) / 2) + 'px',
                   height: height + 'px',
                   width: width + 'px',
@@ -250,6 +252,9 @@ angular.module('ionic-pullup', [])
               scope.$on('ionPullUp:toggle', function() {
                   element.find('i').toggleClass(toggleClasses);
               });
+
+              scope.$on('ionPullUp:open', controller.onTap, element);
+              $ionicGesture.on('tap', controller.onTap, element);
 
               function updateUI() {
                   $timeout(function() {
